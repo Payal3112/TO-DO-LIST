@@ -76,24 +76,18 @@
     <div id="todo-1">
       <h4>1. Post regarding week-3 Griffendev cohort</h4>
       <div>
-        <button onclick="markDone(this)">Mark Done</button>
-        <button onclick="editTodo(this)">Edit</button>
         <button onclick="deleteTodo(1)">Delete</button>
       </div>
     </div>
     <div id="todo-2">
       <h4>2. Take class</h4>
       <div>
-        <button onclick="markDone(this)">Mark Done</button>
-        <button onclick="editTodo(this)">Edit</button>
         <button onclick="deleteTodo(2)">Delete</button>
       </div>
     </div>
     <div id="todo-3">
       <h4>3. eat dinner</h4>
       <div>
-        <button onclick="markDone(this)">Mark Done</button>
-        <button onclick="editTodo(this)">Edit</button>
         <button onclick="deleteTodo(3)">Delete</button>
       </div>
     </div>
@@ -126,8 +120,6 @@
       todoDiv.innerHTML = `
         <h4>${count}. ${text}</h4>
         <div>
-          <button onclick="markDone(this)">Mark Done</button>
-          <button onclick="editTodo(this)">Edit</button>
           <button onclick="deleteTodo(${count})">Delete</button>
         </div>
       `;
@@ -140,22 +132,7 @@
     function clearInput() {
       document.getElementById("inp").value = "";
     }
-
-    function markDone(btn) {
-      const h4 = btn.parentElement.previousElementSibling;
-      h4.style.textDecoration = h4.style.textDecoration === "line-through" ? "none" : "line-through";
-      h4.style.opacity = h4.style.opacity === "0.5" ? "1" : "0.5";
-    }
-
-    function editTodo(btn) {
-      const h4 = btn.parentElement.previousElementSibling;
-      const currentText = h4.innerText.split(". ")[1];
-      const newText = prompt("Edit your todo:", currentText);
-      if (newText !== null && newText.trim() !== "") {
-        const number = h4.innerText.split(". ")[0];
-        h4.innerText = `${number}. ${newText}`;
-      }
-    }
   </script>
 </body>
 </html>
+
