@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Todo App - DOM Demo</title>
+  <style>
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 2rem;
+      background: #848fe1;
+      color: #e8e1e4;
+    }
+
+    h1 {
+      color: #ead706;
+      
+    }
+
+    .todo-card {
+      margin: 0.5rem 0;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.5s ease;
+    }
+
+    .todo-card.done h4 {
+      text-decoration: line-through;
+      color: rgb(118, 119, 109);
+    }
+
+    .fade-out {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    button {
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 4px;
+      background-color: #0d3392;
+      color: white;
+      margin-left: 0.5rem;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #007BFF;
+      cursor: pointer;
+    }
+
+    #inputArea {
+      margin-top: 1rem;
+    }
+
+    input[type="text"] {
+      padding: 0.4rem;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #2e11e8;
+      background: #eaf6ff;
+    }
+
+    #message {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Todo List</h1>
+
+  <div id="todos">
+    <div class="todo-card" id="todo-1">
+      <h4>1. Post regarding week-3 Griffendev cohort</h4>
+      <div>
+        <button onclick="toggleDone(1)">Mark Done</button>
+        <button onclick="editTodo(1)">Edit</button>
+        <button onclick="deleteTodo(1)">Delete</button>
+      </div>
+    </div>
+    <div class="todo-card" id="todo-2">
+      <h4>2. Take class</h4>
+      <div>
+        <button onclick="toggleDone(2)">Mark Done</button>
+        <button onclick="editTodo(2)">Edit</button>
+        <button onclick="deleteTodo(2)">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="inputArea">
+    <input id="inp" type="text" placeholder="e.g., Complete assignment" />
+    <button onclick="addTodo()">Add Todo</button>
+    <button onclick="clearInput()">Clear</button>
+    <div id="message"></div>
+  </div>
+
+  <script>
+    let count = 3;
+
+    function deleteTodo(index) {
+      const todo = document.getElementById("todo-" + index);
+      if (todo) {
+        todo.classList.add('fade-out');
+        setTimeout(() => todo.remove(), 500);
+        showMessage("Todo deleted.", 'red');
+      }
+    }
+
+    function addTodo() {
+      const input = document.getElementById("inp");
+      const text = input.value.trim();
+      if (text === "") {
+        showMessage("Input cannot be empty.", 'red');
+        return;
+      }
+
+      const existingTodos = document.querySelectorAll("#todos h4");
+      for (let todo of existingTodos) {
+        if (todo.innerText.slice(todo.innerText.indexOf(". ") + 2).toLowerCase() === text.toLowerCase()) {
+          showMessage("Todo already exists.", 'red');
+          return;
+        }
+      }
+
+      const todoDiv = document.createElement("div");
+      todoDiv.className = "todo-card";
+      todoDiv.id = "todo-" + count;
+
+      const h4 = document.createElement("h4");
+      h4.innerText = count + ". " + text;
+
+      const doneBtn = document.createElement("button");
+      doneBtn.innerText = "Mark Done";
+      doneBtn.onclick = () => toggleDone(count);
+
+      const editBtn = document.createElement("button");
+      editBtn.innerText = "Edit";
+      editBtn.onclick = () => editTodo(count);
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.innerText = "Delete";
+      deleteBtn.onclick = () => deleteTodo(count);
+
+      const btnDiv = document.createElement("div");
+      btnDiv.appendChild(doneBtn);
+      btnDiv.appendChild(editBtn);
+      btnDiv.appendChild(deleteBtn);
+
+      todoDiv.appendChild(h4);
+      todoDiv.appendChild(btnDiv);
+
+      document.getElementById("todos").appendChild(todoDiv);
+      todoDiv.style.backgroundColor = '#e0ffe0';
+      setTimeout(() => todoDiv.style.backgroundColor = 'white', 1000);
+
+      count++;
+      input.value = "";
+      showMessage("Todo added!", 'green');
+    }
+
+    function clearInput() {
+      document.getElementById("inp").value = "";
+      showMessage("Input cleared.", 'blue');
+    }
+
+    function toggleDone(index) {
+      const todoDiv = document.getElementById("todo-" + index);
+      todoDiv.classList.toggle("done");
+    }
+
+    function editTodo(index) {
+      const todoDiv = document.getElementById("todo-" + index);
+      const h4 = todoDiv.querySelector("h4");
+      const currentText = h4.innerText.slice(h4.innerText.indexOf(". ") + 2);
+      const newText = prompt("Edit your todo:", currentText);
+      if (newText && newText.trim() !== "") {
+        h4.innerText = index + ". " + newText.trim();
+        showMessage("Todo updated!", 'green');
+      }
+    }
+
+    function showMessage(msg, color) {
+      const message = document.getElementById("message");
+      message.innerText = msg;
+      message.style.color = color;
+      setTimeout(() => message.innerText = "", 2000);
+    }
+  </script>
+</body>
+
+</html>
